@@ -2,7 +2,8 @@ pipeline {
     agent any
     
     triggers {
-        scm 'refs/heads/main'
+        githubPush()
+        // scm 'refs/heads/main'
         // Polls the SCM every minute for changes
         // pollSCM('* * * * *') 
     }
@@ -17,7 +18,7 @@ pipeline {
         
         stage('Test') {
             steps {
-                sh 'pytest test.py'
+                sh 'pytest'
             }
             post {
                 always {
@@ -28,11 +29,23 @@ pipeline {
         
         stage('Deploy') {
             when {
-                branch 'main'
+                branch 'master'
             }
             steps {
                 echo 'Deploying to staging environment...'
-                // Add deployment commands here
+                script {
+                    currentBuild.result = "SUCCESS" // Set the result to SUCCESS initially
+                    try {
+                        // Your deployment logic goes here
+                        echo 'Deploying to staging environment...'
+                        // Example: deploy command
+                        // sh 'fab deploy'
+                    } catch (Exception e) {
+                        // If deployment fails, mark the build as FAILURE
+                        currentBuild.result = "FAILURE"
+                        throw e
+                    }
+                }
             }
         }
     }
