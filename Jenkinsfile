@@ -22,11 +22,11 @@ pipeline {
                 echo $PATH
                 sh 'pytest test.py'
             }
-            post {
-                always {
-                    junit '**/test-results/*.xml'
-                }
-            }
+            // post {
+            //     always {
+            //         junit '**/test-results/*.xml'
+            //     }
+            // }
         }
         
         stage('Deploy') {
