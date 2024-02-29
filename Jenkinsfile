@@ -18,7 +18,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                         sudo apt-get update -y;
                         python -m vene myenv;
-                        source myenv\Scripts\activate;
+                        source myenv/Scripts/activate;
                         pip install --upgrade pip;
                         cd /home/ubuntu/;
                         git clone https://github.com/surendergupta/jenkins_CI_CD_pipeline_for_flask_application.git;
