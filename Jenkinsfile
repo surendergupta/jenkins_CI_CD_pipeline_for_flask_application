@@ -18,7 +18,8 @@ pipeline {
         
         stage('Test') {
             steps {
-                sh 'pip install pytest'
+                sh 'sudo pip install pytest'
+                echo $PATH
                 sh 'pytest test.py'
             }
             post {
