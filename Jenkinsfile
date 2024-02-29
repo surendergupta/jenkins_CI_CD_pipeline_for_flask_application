@@ -17,8 +17,10 @@ pipeline {
                     sh '''
                     ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                         sudo apt-get update -y &&
-                        python3 -m venv myenv &&
-                        source myenv/Scripts/activate &&
+                        sudo apt-get install python3-pip &&
+                        sudo pip3 install virtualenv && 
+                        virtualenv venv &&
+                        source venv/bin/activate &&
                         cd /home/ubuntu/ &&
                         git clone https://github.com/surendergupta/jenkins_CI_CD_pipeline_for_flask_application.git &&
                         cd jenkins_CI_CD_pipeline_for_flask_application &&
