@@ -18,7 +18,8 @@ pipeline {
         
         stage('Test') {
             steps {
-                sh 'pytest'
+                sh 'pip install pytest'
+                sh 'pytest test.py'
             }
             post {
                 always {
@@ -55,14 +56,14 @@ pipeline {
             emailext (
                 subject: "Build Success",
                 body: "Jenkins CI CD pipeline for flask application build was successful.",
-                to: "$DEFAULT_RECIPIENTS"
+                to: "gupta.surender.1990@gmail.com"
             )
         }
         failure {
             emailext (
                 subject: "Build Failure",
                 body: "The build failed of Jenkins CI CD pipeline for flask application.",
-                to: "$DEFAULT_RECIPIENTS"
+                to: "gupta.surender.1990@gmail.com"
             )
         }
     }
