@@ -15,11 +15,13 @@ pipeline {
             steps {
                 sshagent(credentials: [SERVER_IP]) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
-                        sudo apt-get update -y &&                       
-                        cd /home/ubuntu/ &&'                        
-                    echo "Flask App to AWS Server"
+                    ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} << 'ENDSSH'
+                        sudo apt-get update -y &&
+                        cd /home/ubuntu/ &&
+                        # Additional commands here
+                    ENDSSH
                     '''
+                    echo "Flask App to AWS Server"                    
                 }                
             }
         }
