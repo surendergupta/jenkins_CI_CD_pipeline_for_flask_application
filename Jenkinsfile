@@ -20,20 +20,14 @@ pipeline {
         }
         stage('Test') {
             steps {
-                script {
-                    try{                
-                        boolean testPassed = true
-                        sh 'pip install pytest'
-                        sh '/usr/bin/python3 -m pytest test.py'
-                    } catch (Exception e){
-                        testPassed = false
-                    }
-                }
+                sh 'pip install pytest'
+                sh '/usr/bin/python3 -m pytest test.py'
             }
             post {
                 success {
-                    testPassed = true
-                    echo "Tests passed!"
+                    script {
+                        boolean testPassed = true
+                    }
                 }
             }
         }
