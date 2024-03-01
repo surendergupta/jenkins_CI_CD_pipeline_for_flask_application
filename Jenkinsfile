@@ -25,17 +25,14 @@ pipeline {
             }
             post {
                 success {
-                    script {
-                        def testPassed = true
-                        // Deploy to staging only if the tests pass
-                        if (testPassed) {
-                            build 'Deploy to Staging'
-                        }
-                    }
+                    build('Deploy to Staging')
                 }
             }
         }
         stage('Deploy to Staging') {
+            when {
+                branch GITHUB_BRANCH
+            }
             steps {
                 script {                                    
                     sshagent(credentials: ['i-0ae1203560d674bb6']) {
