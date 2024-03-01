@@ -27,7 +27,8 @@ pipeline {
             post {
                 success {
                     // If the test stage succeeds, deploy to staging
-                    build('Deploy to Staging')
+                    // build('Deploy to Staging')
+                    input(message: "Tests passed. Proceed to deploy to staging?", ok: "Deploy to Staging")
                 }
             }
         }
