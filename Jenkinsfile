@@ -21,6 +21,7 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                             sudo apt-get update -y &&
                             sudo mkdir -p /home/ubuntu/FlaskApp/ &&
+                            sudo chmod 777 /home/ubuntu/FlaskApp/ &&
                             cd /home/ubuntu/FlaskApp/ &&
                             scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline/* . &&
                             ls'
