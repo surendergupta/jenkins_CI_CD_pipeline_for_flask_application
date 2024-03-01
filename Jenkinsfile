@@ -18,40 +18,40 @@ pipeline {
                 sh 'pip install -r requirements.txt'
             }
         }
-
+        boolean testPassed = true
         stage('Test') {
-            steps {
-                sh 'pip install pytest'
-                sh '/usr/bin/python3 -m pytest test.py'
-            }
-            post {
-                success {
-                    // If the test stage succeeds, deploy to staging
-                    // build('Deploy to Staging')
-                    build job: 'Deploy to Staging'
+            try{
+                steps {
+                    sh 'pip install pytest'
+                    sh '/usr/bin/python3 -m pytest test.py'
                 }
-            }
+            } catch (Exception e){
+                testPassed = false
+            }            
         }
         stage('Deploy to Staging') {
-            steps {
-                script {
-                    sshagent(credentials: ['i-0ae1203560d674bb6']) {
-                        sh '''
-                        ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
-                            sudo apt-get update -y &&
-                            sudo apt install python3-pip -y &&
-                            python3 -m pip install --upgrade pip &&
-                            sudo mkdir -p /home/ubuntu/FlaskApp/ &&
-                            sudo chmod 777 /home/ubuntu/FlaskApp/ &&
-                            cd /home/ubuntu/FlaskApp/ &&
-                            scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline/* . &&                            
-                            pip install -r requirements.txt && 
-                            sudo kill -9 $(sudo lsof -t -i:5000) || true &&
-                            nohup python3 app.py > output.log 2>&1 & '
-                        '''
-                        echo "Flask App deployed to AWS Server"
-                    }
-                }                
+            if(testPassed){
+                //push to artifactory
+                steps {
+                    script {
+                        sshagent(credentials: ['i-0ae1203560d674bb6']) {
+                            sh '''
+                            ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
+                                sudo apt-get update -y &&
+                                sudo apt install python3-pip -y &&
+                                python3 -m pip install --upgrade pip &&
+                                sudo mkdir -p /home/ubuntu/FlaskApp/ &&
+                                sudo chmod 777 /home/ubuntu/FlaskApp/ &&
+                                cd /home/ubuntu/FlaskApp/ &&
+                                scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline/* . &&                            
+                                pip install -r requirements.txt && 
+                                sudo kill -9 $(sudo lsof -t -i:5000) || true &&
+                                nohup python3 app.py > output.log 2>&1 & '
+                            '''
+                            echo "Flask App deployed to AWS Server"
+                        }
+                    }                
+                }
             }
         }        
     }
