@@ -7,7 +7,7 @@ pipeline {
         GITHUB_URL = 'https://github.com/surendergupta/jenkins_CI_CD_pipeline_for_flask_application.git'
         GITHUB_BRANCH = 'master'
         SSH_USER = 'ubuntu'
-        SERVER_IP = '3.91.38.111'
+        SERVER_IP = '52.23.204.18'
     }
 
     triggers {
@@ -31,7 +31,7 @@ pipeline {
             when { expression { flag == true } }
             steps {
                 script {                                    
-                    sshagent(credentials: ['i-0ae1203560d674bb6']) {
+                    sshagent(credentials: ['i-099671d552d282271']) {
                         sh '''
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                             sudo apt-get update -o Acquire::http::Timeout=60 &&
