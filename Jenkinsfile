@@ -8,8 +8,6 @@ pipeline {
 
     triggers {
         githubPush()
-        // Polls the SCM every minute for changes
-        // pollSCM('* * * * *') 
     }
 
     stages {
