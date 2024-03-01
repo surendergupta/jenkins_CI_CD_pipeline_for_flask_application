@@ -24,13 +24,16 @@ pipeline {
                 sh 'pip install pytest'
                 sh '/usr/bin/python3 -m pytest test.py'
             }
-        }
-        stage('Deploy to EC2') {
-            when {
-                allOf {
-                    branch 'master'
-                    not { changeRequest() }
+            post {
+                success {
+                    // If the test stage succeeds, deploy to staging
+                    Deploy 'Deploy to Staging'
                 }
+            }
+        }
+        stage('Deploy') {
+            when {
+                branch 'master'
             }
             steps {
                 script {
