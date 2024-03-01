@@ -18,18 +18,22 @@ pipeline {
                 sh 'pip install -r requirements.txt'
             }
         }
-        boolean testPassed = true
         stage('Test') {
             steps {
-                try{
-                
+                try{                
+                    boolean testPassed = true
                     sh 'pip install pytest'
                     sh '/usr/bin/python3 -m pytest test.py'
                 } catch (Exception e){
                     testPassed = false
                 }
             }
-            
+            post {
+                success {
+                    testPassed = true
+                    echo "Tests passed!"
+                }
+            }
         }
         stage('Deploy to Staging') {
             steps {
