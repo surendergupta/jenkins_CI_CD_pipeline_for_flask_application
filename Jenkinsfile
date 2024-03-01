@@ -20,20 +20,21 @@ pipeline {
         }
         boolean testPassed = true
         stage('Test') {
-            try{
-                steps {
+            steps {
+                try{
+                
                     sh 'pip install pytest'
                     sh '/usr/bin/python3 -m pytest test.py'
+                } catch (Exception e){
+                    testPassed = false
                 }
-            } catch (Exception e){
-                testPassed = false
-            }            
+            }
+            
         }
         stage('Deploy to Staging') {
-            if(testPassed){
-                //push to artifactory
-                steps {
-                    script {
+            steps {
+                script {
+                    if(testPassed){                        
                         sshagent(credentials: ['i-0ae1203560d674bb6']) {
                             sh '''
                             ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
