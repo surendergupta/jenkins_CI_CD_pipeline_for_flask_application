@@ -28,7 +28,7 @@ pipeline {
                 success {
                     // If the test stage succeeds, deploy to staging
                     // build('Deploy to Staging')
-                    build 'Deploy to Staging'
+                    build job: 'Deploy to Staging'
                 }
             }
         }
