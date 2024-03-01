@@ -27,8 +27,10 @@ pipeline {
         }
         stage('Deploy to EC2') {
             when {
-                branch 'master'
-                changeRequest()
+                allOf {
+                    branch 'master'
+                    not { changeRequest() }
+                }
             }
             steps {
                 script {
