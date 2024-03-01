@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh 'pip install requirements.txt'
             }
         }
         stage('Test') {
@@ -31,12 +31,13 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    sshagent(credentials: ['44.223.28.116']) {
+                    sshagent(credentials: [SERVER_IP]) {
                         sh '''
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                             sudo apt-get update -y &&
                             sudo mkdir -p /home/ubuntu/FlaskApp/ &&
-                            cd /home/ubuntu/FlaskApp/ &&                            
+                            cd /home/ubuntu/FlaskApp/ &&
+                            scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline ${SSH_USER}@${SERVER_IP}:/home/ubuntu/FlaskApp/
                             ls'
                         '''
                         echo "Flask App deployed to AWS Server"
