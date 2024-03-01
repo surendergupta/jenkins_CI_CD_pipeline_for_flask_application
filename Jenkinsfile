@@ -18,9 +18,9 @@ pipeline {
                         sh '''
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                             sudo apt-get update -y &&
-                            sudo mkdir -p /home/ubuntu/FlaskApp/
-                            cd /home/ubuntu/FlaskApp/
-                            scp . ${SSH_USER}@${SERVER_IP}:~ &&
+                            sudo mkdir -p /home/ubuntu/FlaskApp/ &&
+                            cd /home/ubuntu/FlaskApp/ &&
+                            scp -r . ${SSH_USER}@${SERVER_IP}:~/FlaskApp/ &&
                             ls'
                         '''
                         echo "Flask App deployed to AWS Server"
