@@ -33,9 +33,6 @@ pipeline {
             }
         }
         stage('Deploy to Staging') {
-            when {
-                branch 'master'
-            }
             steps {
                 script {
                     sshagent(credentials: ['i-0ae1203560d674bb6']) {
