@@ -1,3 +1,5 @@
+def flag = false;
+
 pipeline {
     agent any
     
@@ -19,20 +21,15 @@ pipeline {
             }
         }
         stage('Test') {
+            when { condition }
             steps {
                 sh 'pip install pytest'
                 sh '/usr/bin/python3 -m pytest test.py'
-            }
-            post {
-                success {
-                    build(job:'Deploy to Staging')
-                }
+                script { flag = true }
             }
         }
         stage('Deploy to Staging') {
-            when {
-                branch GITHUB_BRANCH
-            }
+            when { expression { flag == true } }
             steps {
                 script {                                    
                     sshagent(credentials: ['i-0ae1203560d674bb6']) {
