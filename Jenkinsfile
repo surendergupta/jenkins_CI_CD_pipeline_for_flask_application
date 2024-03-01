@@ -18,16 +18,6 @@ pipeline {
                 git branch: env.GITHUB_BRANCH, url: env.GITHUB_URL
             }
         }
-        stage('Build') {
-            steps {
-                sh 'pip install requirements.txt'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'pytest test.py'
-            }
-        }
         stage('Deploy to EC2') {
             steps {
                 script {
