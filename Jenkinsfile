@@ -28,8 +28,7 @@ pipeline {
                             scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline/* . &&                            
                             pip install -r requirements.txt && 
                             sudo kill -9 $(sudo lsof -t -i:5000) || true &&
-                            nohup python3 app.py > output.log 2>&1 & &&
-                            ls'
+                            nohup python3 app.py > output.log 2>&1 & '
                         '''
                         echo "Flask App deployed to AWS Server"
                     }
