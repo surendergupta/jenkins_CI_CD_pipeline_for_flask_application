@@ -9,7 +9,7 @@ pipeline {
     }
 
     triggers {
-        githubPush(branch: GITHUB_BRANCH)
+       githubPush()
     }
 
     stages {
@@ -26,11 +26,8 @@ pipeline {
         }
         stage('Deploy to EC2') {
             when {
-                allOf {
-                    branch 'master'
-                    not { changeRequest() }
-                    previousStagePassed()
-                }             
+                branch 'master'
+                changeRequest()
             }
             steps {
                 script {
