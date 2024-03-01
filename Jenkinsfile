@@ -20,10 +20,15 @@ pipeline {
                         sh '''
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                             sudo apt-get update -y &&
+                            sudo apt install python3-pip -y &&
+                            python3 -m pip install --upgrade pip &&
                             sudo mkdir -p /home/ubuntu/FlaskApp/ &&
                             sudo chmod 777 /home/ubuntu/FlaskApp/ &&
                             cd /home/ubuntu/FlaskApp/ &&
-                            scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline/* . &&
+                            scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline/* . &&                            
+                            pip install -r requirements.txt && 
+                            sudo kill -9 $(sudo lsof -t -i:5000) || true &&
+                            nohup python3 app.py > output.log 2>&1 & &&
                             ls'
                         '''
                         echo "Flask App deployed to AWS Server"
