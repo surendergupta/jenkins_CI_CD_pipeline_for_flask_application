@@ -22,9 +22,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'pip install pytest'
-                sh 'which python3'
-                sh 'where python3'
-                sh 'python3 -m pytest test.py'
+                sh '/usr/bin/python3 -m pytest test.py'
             }
         }
         stage('Deploy to EC2') {
