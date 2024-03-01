@@ -27,11 +27,11 @@ pipeline {
             post {
                 success {
                     // If the test stage succeeds, deploy to staging
-                    Deploy 'Deploy to Staging'
+                    build('Deploy to Staging')
                 }
             }
         }
-        stage('Deploy') {
+        stage('Deploy to Staging') {
             when {
                 branch 'master'
             }
