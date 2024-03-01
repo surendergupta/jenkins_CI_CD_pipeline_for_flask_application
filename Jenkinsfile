@@ -12,6 +12,8 @@ pipeline {
        githubPush()
     }
 
+    boolean testPassed = false
+
     stages {
         stage('Build') {
             steps {
@@ -26,7 +28,7 @@ pipeline {
             post {
                 success {
                     script {
-                        boolean testPassed = true
+                        testPassed = true
                     }
                 }
             }
