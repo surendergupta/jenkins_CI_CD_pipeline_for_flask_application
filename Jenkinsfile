@@ -2,18 +2,36 @@ pipeline {
     agent any
     
     environment {
-        GITHUB_URL='https://github.com/surendergupta/jenkins_CI_CD_pipeline_for_flask_application.git'
+        GITHUB_URL = 'https://github.com/surendergupta/jenkins_CI_CD_pipeline_for_flask_application.git'
         GITHUB_BRANCH = 'master'
         SSH_USER = 'ubuntu'
         SERVER_IP = '3.91.38.111'
     }
 
     triggers {
-        githubPush()
+        githubPush(branch: GITHUB_BRANCH)
     }
 
     stages {
+        stage('Build') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'pytest'
+            }
+        }
         stage('Deploy to EC2') {
+            when {
+                allOf {
+                    branch 'master'
+                    not { changeRequest() }
+                    previousStagePassed()
+                }             
+            }
             steps {
                 script {
                     sshagent(credentials: ['i-0ae1203560d674bb6']) {
@@ -35,5 +53,22 @@ pipeline {
                 }                
             }
         }        
+    }
+
+    post {
+        success {
+            emailext (
+                subject: "Build Success",
+                body: "Jenkins CI CD pipeline for flask application build was successful.",
+                to: "gupta.surender.1990@gmail.com"
+            )
+        }
+        failure {
+            emailext (
+                subject: "Build Failure",
+                body: "The build failed of Jenkins CI CD pipeline for flask application.",
+                to: "gupta.surender.1990@gmail.com"
+            )
+        }
     }
 }
