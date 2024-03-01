@@ -14,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sshagent(credentials: ['your-ssh-credentials-id']) {
+                    sshagent(credentials: ['44.223.28.116']) {
                         sh '''
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                             sudo apt-get update -y &&
