@@ -18,25 +18,17 @@ pipeline {
                 git branch: env.GITHUB_BRANCH, url: env.GITHUB_URL
             }
         }
-        stage('Run Tests') {
+        stage('Build') {
             steps {
-                script {
-                    sh 'pip install pytest Flask'
-                    sh 'pytest test.py'
-                }
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'pytest test.py'
             }
         }
         stage('Deploy to EC2') {
-            when {
-                allOf {
-                    branch 'master' 
-                    not { anyOf {
-                        currentBuild.result == 'ABORTED'
-                        currentBuild.result == 'FAILURE'
-                        currentBuild.result == 'UNSTABLE'
-                    }}
-                }
-            }
             steps {
                 script {
                     sshagent(credentials: ['44.223.28.116']) {
@@ -44,8 +36,7 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
                             sudo apt-get update -y &&
                             sudo mkdir -p /home/ubuntu/FlaskApp/ &&
-                            cd /home/ubuntu/FlaskApp/ &&
-                            scp -o StrictHostKeyChecking=no -r * ${SSH_USER}@${SERVER_IP}:~/FlaskApp/ &&
+                            cd /home/ubuntu/FlaskApp/ &&                            
                             ls'
                         '''
                         echo "Flask App deployed to AWS Server"
