@@ -25,7 +25,7 @@ pipeline {
             }
             post {
                 success {
-                    build('Deploy to Staging')
+                    build(job:'Deploy to Staging')
                 }
             }
         }
