@@ -22,7 +22,7 @@ pipeline {
                             sudo apt-get update -y &&
                             sudo mkdir -p /home/ubuntu/FlaskApp/ &&
                             cd /home/ubuntu/FlaskApp/ &&
-                            scp -o StrictHostKeyChecking=no -r ${SSH_USER}@${SERVER_IP}:/var/lib/jenkins/workspace/jenkins_pipeline/* . &&
+                            scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/jenkins_pipeline/* . &&
                             ls'
                         '''
                         echo "Flask App deployed to AWS Server"
