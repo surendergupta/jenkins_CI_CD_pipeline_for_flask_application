@@ -21,7 +21,6 @@ pipeline {
             }
         }
         stage('Test') {
-            when { condition }
             steps {
                 sh 'pip install pytest'
                 sh '/usr/bin/python3 -m pytest test.py'
