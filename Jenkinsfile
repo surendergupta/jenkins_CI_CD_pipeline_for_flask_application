@@ -21,7 +21,8 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'pytest'
+                sh 'pip install pytest'
+                sh 'pytest test.py'
             }
         }
         stage('Deploy to EC2') {
