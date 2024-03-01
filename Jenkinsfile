@@ -34,7 +34,6 @@ pipeline {
                     sshagent(credentials: ['i-099671d552d282271']) {
                         sh '''
                         ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SERVER_IP} '
-                            sudo apt-get update -o Acquire::http::Timeout=60 &&
                             sudo apt install python3-pip -y &&
                             python3 -m pip install --upgrade pip &&
                             sudo mkdir -p /home/ubuntu/FlaskApp/ &&
